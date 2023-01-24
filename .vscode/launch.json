@@ -1,0 +1,116 @@
+{
+    "version": "0.2.0",
+    "inputs": [
+        {
+            "id": "workspace",
+            "type": "pickString",
+            "description": "Pick the workspace root for this session",
+            "default": "code/",
+            "options": [
+                {
+                    "label": "code",
+                    "value": "code"
+                },
+                {
+                    "label": "docs",
+                    "value": "docs"
+                },
+                {
+                    "label": "sphinx-default",
+                    "value": "lib/esbonio/tests/sphinx-default/workspace"
+                },
+                {
+                    "label": "sphinx-extensions",
+                    "value": "lib/esbonio/tests/sphinx-extensions/workspace"
+                },
+            ]
+        }
+    ],
+    "configurations": [
+        {
+            "name": "VSCode Extension",
+            "type": "extensionHost",
+            "request": "launch",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceRoot}/code",
+                "--folder-uri=${workspaceRoot}/${input:workspace}"
+            ],
+            "outFiles": [
+                "${workspaceRoot}/code/dist/node/**/*.js"
+            ],
+            "preLaunchTask": "${defaultBuildTask}",
+            "env": {
+                "VSCODE_LSP_DEBUG": "true"
+            }
+        },
+        {
+            "name": "Language Server",
+            "type": "python",
+            "request": "launch",
+            "module": "esbonio",
+            "justMyCode": false,
+            "args": [
+                "--port",
+                "8421"
+            ],
+            "python": "${command:python.interpreterPath}",
+            "cwd": "${workspaceRoot}"
+        },
+        {
+            "name": "Docs",
+            "type": "python",
+            "request": "launch",
+            "module": "sphinx.cmd.build",
+            "args": [
+                "-M",
+                "html",
+                ".",
+                "_build",
+                "-Ea"
+            ],
+            "python": "${command:python.interpreterPath}",
+            "cwd": "${workspaceFolder}/docs"
+        },
+        {
+            "name": "Python: Attach",
+            "type": "python",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 5678
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "."
+                }
+            ],
+            "justMyCode": false
+        },
+        {
+            "name": "Python: Remote Attach",
+            "type": "python",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 5678
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}/lib/esbonio",
+                    "remoteRoot": "."
+                }
+            ]
+        }
+    ],
+    "compounds": [
+        {
+            "name": "VSCode + Language Server",
+            "configurations": [
+                "Language Server",
+                "VSCode Extension"
+            ]
+        }
+    ]
+}

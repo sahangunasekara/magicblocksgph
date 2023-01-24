@@ -1,0 +1,22 @@
+.coverage
+.env
+.ipynb_checkpoints
+.tox
+.vscode-test
+
+*.pyc
+*.egg-info
+*.log
+*.mo
+
+__pycache__
+_build
+build
+node_modules
+dist
+
+.changes.html
+CHANGELOG.md
+
+# Demo tutorial is populated during the build.
+lib/esbonio-extensions/esbonio/tutorial_demo

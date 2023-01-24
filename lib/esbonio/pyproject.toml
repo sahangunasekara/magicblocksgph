@@ -1,0 +1,95 @@
+[build-system]
+requires = ["setuptools >= 35.0.2", "wheel >= 0.29.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.isort]
+force_single_line = true
+known_first_party = ["esbonio"]
+profile = "black"
+
+[tool.pytest.ini_options]
+addopts = "--doctest-glob='*.txt'"
+asyncio_mode = "auto"
+filterwarnings = [
+    "ignore:'contextfunction' is renamed to 'pass_context',*:DeprecationWarning",
+    "ignore:'environmentfilter' is renamed to 'pass_environment',*:DeprecationWarning",
+]
+
+[tool.mypy]
+mypy_path = "$MYPY_CONFIG_FILE_DIR"
+explicit_package_bases = true
+check_untyped_defs = true
+
+[tool.towncrier]
+filename = "CHANGES.rst"
+directory = "changes/"
+title_format = "v{version} - {project_date}"
+issue_format = "`#{issue} <https://github.com/swyddfa/esbonio/issues/{issue}>`_"
+underlines = ["-", "^", "\""]
+
+[[tool.towncrier.type]]
+directory = "feature"
+name = "Features"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "enhancement"
+name = "Enhancements"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "fix"
+name = "Fixes"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "doc"
+name = "Documentation"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "api"
+name = "API Changes"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "breaking"
+name = "Breaking Changes"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "deprecated"
+name = "Deprecated"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "misc"
+name = "Misc"
+showcontent = true
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+isolated_build = True
+skip_missing_interpreters = true
+envlist = py37-sphinx{4,5}, py{38,39,310,311}-sphinx{4,5,6}
+
+[testenv]
+deps =
+    sphinx4: sphinx>=4,<5
+
+    sphinx5: sphinx>=5,<6
+
+    sphinx6: sphinx>=6,<7
+extras = test
+commands =
+    python ../../scripts/check-sphinx-version.py
+    pytest {posargs}
+
+[testenv:pkg]
+deps =
+    build
+usedevelop = True
+commands =
+    python -m build
+"""
