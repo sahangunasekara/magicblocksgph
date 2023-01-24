@@ -39,7 +39,7 @@
         "@types/mocha": "^10.0.1",
         "@types/node": "^14.17.15",
         "@types/semver": "^7.3.13",
-        "@types/vscode": "1.66.0",
+        "@types/vscode": "1.74.0",
         "@vscode/vsce": "^2.16.0",
         "mocha": "^10.2.0",
         "path-browserify": "^1.0.1",
